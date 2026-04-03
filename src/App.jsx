@@ -19,7 +19,7 @@ function App() {
           <TopNav currentPage={currentPage} setCurrentPage={setCurrentPage} />
           <div className="page-content">
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
-            {currentPage === 'trips' && <TripsPage />}
+            {currentPage === 'trips' && <TripsPage setCurrentPage={setCurrentPage} />}
             {currentPage === 'create' && <CreatePage />}
             {currentPage === 'browse' && <BrowsePage />}
           </div>
@@ -126,29 +126,97 @@ function HomePage({ setCurrentPage }) {
   )
 }
 
-function TripsPage() {
-  const trips = [
-    { id: 1, title: "Bali, Indonesia", dates: "Mar 2025", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400" },
-    { id: 2, title: "Paris, France", dates: "Jun 2025", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=400" },
-    { id: 3, title: "Amalfi Coast, Italy", dates: "Aug 2025", img: "https://images.unsplash.com/photo-1612698093158-e07ac200d44e?w=400" },
-    { id: 4, title: "Kyoto, Japan", dates: "Oct 2025", img: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?w=400" },
-    { id: 5, title: "Santorini, Greece", dates: "Dec 2025", img: "https://images.unsplash.com/photo-1570077188670-e3a8d69ac5ff?w=400" },
-    { id: 6, title: "New York, USA", dates: "Jan 2026", img: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=400" },
+function TripsPage({ setCurrentPage }) {
+const trips = [
+    {
+      id: 1,
+      title: "Bali, Indonesia",
+      photos: [
+        "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=400",
+        "https://images.unsplash.com/photo-1552733407-5d5c46c3bb3b?w=400",
+        "https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400",
+        "https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400",
+        "https://images.unsplash.com/photo-1573790387438-4da905039392?w=400",
+        "https://images.unsplash.com/photo-1554931670-4ebfabf6e7a9?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1516690561799-46d8f74f9abf?w=400",
+        "https://images.unsplash.com/photo-1546484475-7f7bd55792da?q=80&w=1287&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1667992403195-d2241a40ca2d?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1616484173745-07f25fd0547f?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1539367628448-4bc5c9d171c8?w=400",
+        "https://images.unsplash.com/photo-1541681474356-5c6ad40c7990?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+      ]
+    },
+    {
+      id: 2,
+      title: "Kauai, Hawaii",
+      photos: [
+        "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=400",
+        "https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?w=400",
+        "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=400",
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400",
+        "https://images.unsplash.com/photo-1505852817199-55498f0255f7?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=800",
+        "https://images.unsplash.com/photo-1598135753163-6167c1a1ad65?w=400",
+        "https://images.unsplash.com/photo-1717355126082-7ea629bda963?q=80&w=1074&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=800",
+        "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?w=400",
+        "https://images.unsplash.com/photo-1471922694854-ff1b63b20054?w=400",
+        "https://images.unsplash.com/photo-1510414842594-a61c69b5ae57?w=400",
+        "https://images.unsplash.com/photo-1687548710957-216cb1f2823f?q=80&w=1329&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1691252719867-59b4808bb11b?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+      ]
+    },
+    {
+      id: 3,
+      title: "Tahiti, French Polynesia",
+      photos: [
+        "https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?w=400",
+        "https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=400",
+        "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=400",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=400",
+        "https://images.unsplash.com/photo-1513415563383-4e580ed27a46?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1703549008444-a60559aa2c07?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1703549068359-49d854524ddd?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1730286855206-3ff94c2fd211?q=80&w=1122&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1468413253725-0d5181091126?w=400",
+        "https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400",
+        "https://images.unsplash.com/photo-1662732766358-baeccaf64fee?q=80&w=627&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+        "https://images.unsplash.com/photo-1698551007683-7226dc6f4e85?q=80&w=1032&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400",
+      ]
+    },
   ]
 
   return (
-    <div className="page">
-      <h3 className="section-title">My Trips</h3>
-      <div className="trip-grid">
-        {trips.map(trip => (
-          <div className="trip-card" key={trip.id}>
-            <img src={trip.img} alt={trip.title} className="card-img" />
-            <div className="card-info">
-              <h4>{trip.title}</h4>
-              <p>{trip.dates}</p>
-            </div>
-          </div>
-        ))}
+    <div className="page trips-page">
+      {trips.map(trip => (
+        <TripBoard key={trip.id} trip={trip} />
+      ))}
+      <button className="btn-create-trip" onClick={() => setCurrentPage('create')}>
+        Create A New Trip
+      </button>
+    </div>
+  )
+}
+
+function TripBoard({ trip }) {
+  const [page, setPage] = useState(0)
+  const photosPerPage = 6
+
+  const totalPages = Math.ceil(trip.photos.length / photosPerPage)
+  const visiblePhotos = trip.photos.slice(page * photosPerPage, (page + 1) * photosPerPage)
+
+  const prev = () => setPage(p => (p === 0 ? totalPages - 1 : p - 1))
+  const next = () => setPage(p => (p === totalPages - 1 ? 0 : p + 1))
+
+  return (
+    <div className="trip-board">
+      <p className="trip-board-title">{trip.title}</p>
+      <div className="trip-board-nav">
+        <button className="arrow-btn" onClick={prev}>‹</button>
+        <div className="photo-grid">
+          {visiblePhotos.map((photo, index) => (
+            <img key={index} src={photo} alt={`${trip.title} ${index + 1}`} className="photo-tile" />
+          ))}
+        </div>
+        <button className="arrow-btn" onClick={next}>›</button>
       </div>
     </div>
   )
