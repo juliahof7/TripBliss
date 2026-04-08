@@ -20,7 +20,7 @@ function App() {
           <div className="page-content">
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
             {currentPage === 'trips' && <TripsPage setCurrentPage={setCurrentPage} />}
-            {currentPage === 'create' && <CreatePage />}
+            {currentPage === 'create' && <CreatePage setCurrentPage={setCurrentPage} />}
             {currentPage === 'browse' && <BrowsePage />}
           </div>
           <div className="float-logo" onClick={() => setCurrentPage('home')}>
@@ -222,11 +222,65 @@ function TripBoard({ trip }) {
   )
 }
 
-function CreatePage() {
+function CreatePage({ setCurrentPage }) {
+  const [boardName, setBoardName] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [notes, setNotes] = useState('')
+
+  const handleCreate = () => {
+    if (boardName.trim() === '') {
+      alert('Please enter a trip location!')
+      return
+    }
+    setCurrentPage('trips')
+  }
+
   return (
-    <div className="page">
-      <h3 className="section-title">Create a Trip</h3>
-      <p>Coming soon...</p>
+    <div className="page create-page">
+      <div className="form-group">
+        <label className="form-label">Board Name</label>
+        <input
+          className="form-input"
+          type="text"
+          placeholder="Trip Location"
+          value={boardName}
+          onChange={e => setBoardName(e.target.value)}
+        />
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Trip Dates</label>
+        <div className="date-row">
+          <input
+            className="form-input date-input"
+            type="date"
+            value={startDate}
+            onChange={e => setStartDate(e.target.value)}
+          />
+          <span className="date-separator">–</span>
+          <input
+            className="form-input date-input"
+            type="date"
+            value={endDate}
+            onChange={e => setEndDate(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <div className="form-group">
+        <label className="form-label">Optional Notes</label>
+        <textarea
+          className="form-input form-textarea"
+          placeholder="Add any notes about your trip..."
+          value={notes}
+          onChange={e => setNotes(e.target.value)}
+        />
+      </div>
+
+      <button className="btn-create-trip" onClick={handleCreate}>
+        Create New Board
+      </button>
     </div>
   )
 }
