@@ -10,18 +10,34 @@ import './App.css'
 
 function App() {
   const [currentPage, setCurrentPage] = useState('splash')
+  const [selectedTrip, setSelectedTrip] = useState(null)
+  const [selectedCard, setSelectedCard] = useState(null)
+  const [cardSource, setCardSource] = useState(null)
+
+  const navigateToCard = (card, source) => {
+    setSelectedCard(card)
+    setCardSource(source)
+    setCurrentPage('cardDetail')
+  }
+
+  const navigateToTrip = (trip) => {
+    setSelectedTrip(trip)
+    setCurrentPage('tripDetail')
+  }
 
   return (
     <div className="app">
       {currentPage === 'splash' && <SplashScreen onEnter={() => setCurrentPage('home')} />}
       {currentPage !== 'splash' && (
         <>
-          <TopNav currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          <TopNav currentPage={currentPage} setCurrentPage={setCurrentPage} selectedTrip={selectedTrip} />
           <div className="page-content">
             {currentPage === 'home' && <HomePage setCurrentPage={setCurrentPage} />}
-            {currentPage === 'trips' && <TripsPage setCurrentPage={setCurrentPage} />}
+            {currentPage === 'trips' && <TripsPage setCurrentPage={setCurrentPage} navigateToTrip={navigateToTrip} />}
+            {currentPage === 'tripDetail' && <TripDetailPage trip={selectedTrip} setCurrentPage={setCurrentPage} navigateToCard={navigateToCard} />}
+            {currentPage === 'cardDetail' && <CardDetailPage card={selectedCard} source={cardSource} setCurrentPage={setCurrentPage} />}
             {currentPage === 'create' && <CreatePage setCurrentPage={setCurrentPage} />}
-            {currentPage === 'browse' && <BrowsePage />}
+            {currentPage === 'browse' && <BrowsePage navigateToCard={navigateToCard} />}
           </div>
           <div className="float-logo" onClick={() => setCurrentPage('home')}>
             <img src={logoFloat} alt="tb" className="float-logo-img" />
@@ -46,17 +62,25 @@ function SplashScreen({ onEnter }) {
   )
 }
 
-function TopNav({ currentPage, setCurrentPage }) {
+function TopNav({ currentPage, setCurrentPage, selectedTrip }) {
   const titles = {
     home: 'Home',
-    trips: 'My Trips',
-    create: 'Create',
+    trips: 'My Trip Boards',
+    tripDetail: selectedTrip ? selectedTrip.title : 'Trip Detail',
+    cardDetail: 'Card Detail',
+    create: 'Create a New Board',
     browse: 'Browse',
+  }
+
+  const handleBack = () => {
+    if (currentPage === 'tripDetail') setCurrentPage('trips')
+    else if (currentPage === 'cardDetail') setCurrentPage('tripDetail')
+    else setCurrentPage('home')
   }
 
   return (
     <div className="top-nav">
-      <button className="back-btn" onClick={() => setCurrentPage('home')}>
+      <button className="back-btn" onClick={handleBack}>
         <ChevronLeft size={22} color="#1a1a1a" />
       </button>
       <h2 className="page-title">{titles[currentPage]}</h2>
@@ -126,8 +150,8 @@ function HomePage({ setCurrentPage }) {
   )
 }
 
-function TripsPage({ setCurrentPage }) {
-const trips = [
+function TripsPage({ setCurrentPage, navigateToTrip }) {
+  const trips = [
     {
       id: 1,
       title: "Bali, Indonesia",
@@ -187,7 +211,7 @@ const trips = [
   return (
     <div className="page trips-page">
       {trips.map(trip => (
-        <TripBoard key={trip.id} trip={trip} />
+        <TripBoard key={trip.id} trip={trip} navigateToTrip={navigateToTrip} />
       ))}
       <button className="btn-create-trip" onClick={() => setCurrentPage('create')}>
         Create A New Trip
@@ -196,27 +220,241 @@ const trips = [
   )
 }
 
-function TripBoard({ trip }) {
+function TripBoard({ trip, navigateToTrip }) {
   const [page, setPage] = useState(0)
   const photosPerPage = 6
-
   const totalPages = Math.ceil(trip.photos.length / photosPerPage)
   const visiblePhotos = trip.photos.slice(page * photosPerPage, (page + 1) * photosPerPage)
-
   const prev = () => setPage(p => (p === 0 ? totalPages - 1 : p - 1))
   const next = () => setPage(p => (p === totalPages - 1 ? 0 : p + 1))
 
   return (
     <div className="trip-board">
-      <p className="trip-board-title">{trip.title}</p>
+      <p className="trip-board-title" onClick={() => navigateToTrip(trip)}>{trip.title}</p>
       <div className="trip-board-nav">
         <button className="arrow-btn" onClick={prev}>‹</button>
         <div className="photo-grid">
           {visiblePhotos.map((photo, index) => (
-            <img key={index} src={photo} alt={`${trip.title} ${index + 1}`} className="photo-tile" />
+            <img
+              key={index}
+              src={photo}
+              alt={`${trip.title} ${index + 1}`}
+              className="photo-tile"
+              onClick={() => navigateToTrip(trip)}
+            />
           ))}
         </div>
         <button className="arrow-btn" onClick={next}>›</button>
+      </div>
+    </div>
+  )
+}
+
+function TripDetailPage({ trip, setCurrentPage, navigateToCard }) {
+  if (!trip) return null
+
+  const cardDetails = {
+    "Bali, Indonesia": [
+      {
+        id: 1,
+        type: "Hotel",
+        name: "MAJA Canggu",
+        photo: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800",
+        rating: 4.7,
+        address: "Jl. Pantai Batu Bolong Gg. Bulan No.1, Canggu, Kec. Kuta Utara, Kabupaten Badung, Bali 80361, Indonesia",
+        phone: "+62 812-4612-0558",
+        hours: "Open 24 Hours",
+        website: "https://www.thisismaja.com/"
+      },
+      {
+        id: 2,
+        type: "Restaurant",
+        name: "ZIN Cafe",
+        photo: "https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=800",
+        rating: 4.8,
+        address: "Jl. Nelayan No.78F, Canggu, Kec. Kuta Utara, Kabupaten Badung, Bali, Indonesia",
+        phone: "+62 811-3111-6647",
+        hours: "6:30AM - 12AM",
+        website: "https://zin.world/zin-cafe/"
+      },
+      {
+        id: 3,
+        type: "Activity",
+        name: "Tegallalang Rice Terraces",
+        photo: "https://images.unsplash.com/photo-1537996194471-e657df975ab4?w=800",
+        rating: 4.6,
+        address: "Tegallalang, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+        phone: "+62 361-901-1316",
+        hours: "Open 24 Hours",
+        website: "https://www.tegallalangriceterrace.com/"
+      },
+    ],
+    "Kauai, Hawaii": [
+      {
+        id: 4,
+        type: "Hotel",
+        name: "Grand Hyatt Kauai",
+        photo: "https://images.unsplash.com/photo-1542259009477-d625272157b7?w=800",
+        rating: 4.8,
+        address: "1571 Poipu Rd, Koloa, HI 96756, United States",
+        phone: "+1 808-742-1234",
+        hours: "Open 24 Hours",
+        website: "https://www.hyatt.com/grand-hyatt/kauai"
+      },
+      {
+        id: 5,
+        type: "Activity",
+        name: "Na Pali Coast State Park",
+        photo: "https://images.unsplash.com/photo-1505852679233-d9fd70aff56d?w=800",
+        rating: 4.9,
+        address: "Haena, HI 96714, United States",
+        phone: "+1 808-274-3444",
+        hours: "Open 24 Hours",
+        website: "https://dlnr.hawaii.gov/dsp/parks/kauai/napali-coast-state-wilderness-park/"
+      },
+      {
+        id: 6,
+        type: "Restaurant",
+        name: "Red Salt Restaurant",
+        photo: "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=800",
+        rating: 4.7,
+        address: "2251 Poipu Rd, Koloa, HI 96756, United States",
+        phone: "+1 808-828-8888",
+        hours: "5:30PM - 9:30PM",
+        website: "https://www.koaceanicollection.com/red-salt"
+      },
+    ],
+    "Tahiti, French Polynesia": [
+      {
+        id: 7,
+        type: "Hotel",
+        name: "Intercontinental Bora Bora",
+        photo: "https://images.unsplash.com/photo-1589197331516-4d84b72ebde3?w=800",
+        rating: 4.9,
+        address: "Motu Piti Aau, Bora Bora 98730, French Polynesia",
+        phone: "+689 40-60-76-00",
+        hours: "Open 24 Hours",
+        website: "https://www.ihg.com/intercontinental/borabora"
+      },
+      {
+        id: 8,
+        type: "Activity",
+        name: "Lagoonarium de Tahiti",
+        photo: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=800",
+        rating: 4.5,
+        address: "PK 11.4, Route de la Côte Ouest, Punaauia, French Polynesia",
+        phone: "+689 87-24-57-05",
+        hours: "9AM - 5PM",
+        website: "https://www.lagoonarium.pf/"
+      },
+      {
+        id: 9,
+        type: "Restaurant",
+        name: "Le Carre Restaurant",
+        photo: "https://images.unsplash.com/photo-1559494007-9f5847c49d94?w=800",
+        rating: 4.6,
+        address: "Sofitel Tahiti Ia Ora Beach Resort, Punaauia, French Polynesia",
+        phone: "+689 40-86-66-00",
+        hours: "6:30AM - 10PM",
+        website: "https://www.sofitel-tahiti.com/"
+      },
+    ]
+  }
+
+  const tripCards = cardDetails[trip.title] || []
+
+  return (
+    <div className="page trip-detail-page">
+      <div className="photo-grid-detail">
+        {trip.photos.map((photo, index) => (
+          <img
+            key={index}
+            src={photo}
+            alt={`${trip.title} ${index + 1}`}
+            className="photo-tile"
+            onClick={() => navigateToCard(tripCards[index % tripCards.length], 'trips')}
+          />
+        ))}
+      </div>
+
+      <div className="add-btn-wrapper">
+        <button className="add-photo-btn" onClick={() => setCurrentPage('browse')}>
+          <PlusCircle size={48} color="#8F9996" />
+        </button>
+      </div>
+
+      <div className="notes-section">
+        <h4 className="notes-title">Notes:</h4>
+        <div className="notes-field">
+          <p className="notes-label">Board Name</p>
+          <p className="notes-value">{trip.title}</p>
+        </div>
+        <div className="notes-field">
+          <p className="notes-label">Trip Dates</p>
+          <p className="notes-value">{trip.dates || '8/11/2026 - 8/25/2026'}</p>
+        </div>
+        <div className="notes-field notes-field-large">
+          <p className="notes-label">Optional Notes</p>
+          <p className="notes-value">{trip.notes || 'Add your trip notes here...'}</p>
+          <span className="edit-pencil">✏️</span>
+        </div>
+      </div>
+
+      <button className="btn-create-trip">
+        Share Board
+      </button>
+    </div>
+  )
+}
+
+function CardDetailPage({ card, source, setCurrentPage }) {
+  if (!card) return null
+
+  const renderStars = (rating) => {
+    const full = Math.floor(rating)
+    const half = rating % 1 >= 0.5
+    let stars = ''
+    for (let i = 0; i < full; i++) stars += '★'
+    if (half) stars += '½'
+    return stars
+  }
+
+  return (
+    <div className="page card-detail-page">
+      <p className="card-type-label"><strong>{card.type}:</strong> {card.name}</p>
+      <img src={card.photo} alt={card.name} className="card-detail-img" />
+
+      <div className="card-detail-info">
+        <p className="card-detail-row">
+          <strong>Google Rating:</strong> {card.rating} <span className="stars">{renderStars(card.rating)}</span>
+        </p>
+        <p className="card-detail-row">
+          <strong>Address:</strong> {card.address}
+        </p>
+        <p className="card-detail-row">
+          <strong>Phone:</strong> <a href={`tel:${card.phone}`}>{card.phone}</a>
+        </p>
+        <p className="card-detail-row">
+          <strong>Hours:</strong> {card.hours}
+        </p>
+        <p className="card-detail-row">
+          <strong>Website:</strong> <a href={card.website} target="_blank" rel="noreferrer">{card.website}</a>
+        </p>
+      </div>
+
+      <div className="card-detail-buttons">
+        {source === 'trips' ? (
+          <button className="btn-delete" onClick={() => setCurrentPage('tripDetail')}>
+            Delete
+          </button>
+        ) : (
+          <button className="btn-create-trip" onClick={() => setCurrentPage('trips')}>
+            Add to Board
+          </button>
+        )}
+        <button className="btn-create-trip" onClick={() => alert('Share feature coming soon!')}>
+          Share Card
+        </button>
       </div>
     </div>
   )

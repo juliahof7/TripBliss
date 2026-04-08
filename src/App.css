@@ -498,3 +498,141 @@
   color: var(--text-dark);
   background-color: var(--white);
 }
+
+/* TRIP DETAIL PAGE */
+.trip-detail-page {
+  background-color: var(--white);
+  min-height: 100vh;
+  padding: 16px;
+  padding-bottom: 120px;
+}
+
+.photo-grid-detail {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.add-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.add-photo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.notes-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.notes-field {
+  background-color: var(--pink-light);
+  border-radius: 10px;
+  padding: 12px 16px;
+  position: relative;
+}
+
+.notes-field-large {
+  min-height: 100px;
+}
+
+.notes-label {
+  font-size: 11px;
+  color: var(--text-gray);
+  margin-bottom: 4px;
+}
+
+.notes-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.edit-pencil {
+  position: absolute;
+  bottom: 10px;
+  right: 12px;
+  font-size: 16px;
+}
+
+/* CARD DETAIL PAGE */
+.card-detail-page {
+  background-color: var(--white);
+  min-height: 100vh;
+  padding: 20px 16px;
+  padding-bottom: 120px;
+}
+
+.card-type-label {
+  font-size: 15px;
+  margin-bottom: 12px;
+  color: var(--text-dark);
+}
+
+.card-detail-img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.card-detail-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.card-detail-row {
+  font-size: 14px;
+  color: var(--text-dark);
+  line-height: 1.5;
+}
+
+.card-detail-row a {
+  color: var(--blue);
+  text-decoration: underline;
+}
+
+.stars {
+  color: #F4A623;
+  font-size: 16px;
+}
+
+.card-detail-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.btn-delete {
+  background-color: var(--gray-light);
+  color: var(--text-dark);
+  border: none;
+  padding: 14px 40px;
+  border-radius: 30px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  width: 80%;
+}
+
+.btn-delete:hover {
+  opacity: 0.9;
+}
