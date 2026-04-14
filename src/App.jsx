@@ -6,6 +6,11 @@ import cardCreate from './assets/card-create.png'
 import cardBrowse from './assets/card-browse.png'
 import logoHeader from './assets/logo-header.png'
 import logoFloat from './assets/logo-float.png'
+import suitcaseImg from './assets/Suitcase.png'
+import passportImg from './assets/Passport.png'
+import mapImg from './assets/Map.png'
+import tripblissImg from './assets/TripBliss.png'
+import profilePic from './assets/icon-profilepic.jpg'
 import './App.css'
 
 function App() {
@@ -13,6 +18,7 @@ function App() {
   const [selectedTrip, setSelectedTrip] = useState(null)
   const [selectedCard, setSelectedCard] = useState(null)
   const [cardSource, setCardSource] = useState(null)
+  const [onboardingStep, setOnboardingStep] = useState(0)
 
   const navigateToCard = (card, source) => {
     setSelectedCard(card)
@@ -27,8 +33,18 @@ function App() {
 
   return (
     <div className="app">
-      {currentPage === 'splash' && <SplashScreen onEnter={() => setCurrentPage('home')} />}
-      {currentPage !== 'splash' && (
+      {currentPage === 'splash' && <SplashScreen onEnter={() => setCurrentPage('onboarding')} />}
+      {currentPage === 'onboarding' && (
+        <OnboardingFlow
+          step={onboardingStep}
+          setStep={setOnboardingStep}
+          onFinish={() => setCurrentPage('signin')}
+        />
+      )}
+      {currentPage === 'signin' && <SignInPage setCurrentPage={setCurrentPage} />}
+      {currentPage === 'register' && <RegisterPage setCurrentPage={setCurrentPage} />}
+      {currentPage === 'forgotPassword' && <ForgotPasswordPage setCurrentPage={setCurrentPage} />}
+      {currentPage !== 'splash' && currentPage !== 'onboarding' && currentPage !== 'signin' && currentPage !== 'register' && currentPage !== 'forgotPassword' && (
         <>
           <TopNav currentPage={currentPage} setCurrentPage={setCurrentPage} selectedTrip={selectedTrip} />
           <div className="page-content">
@@ -59,6 +75,177 @@ function SplashScreen({ onEnter }) {
   return (
     <div className="splash" onClick={onEnter}>
       <img src={splashBg} alt="TripBliss" className="splash-bg" />
+    </div>
+  )
+}
+
+function OnboardingFlow({ step, setStep, onFinish }) {
+  const screens = [
+    {
+      title: "Welcome to TripBliss!",
+      image: suitcaseImg,
+      heading: "Plan Your Trips in One Place",
+      body: "Organize your destinations, activities, and ideas all in one simple trip board.",
+      navTitle: "TripBliss : Onboarding",
+      isFirst: true,
+    },
+    {
+      title: "Travel Planning Made Simple",
+      image: passportImg,
+      heading: "No More Scattered Plans",
+      body: "Keep everything in one place instead of juggling notes, tabs, and screenshots.",
+      navTitle: "TripBliss : Why It Matters",
+    },
+    {
+      title: "Discover and Share Trips",
+      image: mapImg,
+      heading: "Get Inspired by Others",
+      body: "Browse travel boards, copy ideas, and create your own personalized trips.",
+      navTitle: "TripBliss : Contribute",
+    },
+    {
+      title: "Start Your Next Adventure",
+      image: tripblissImg,
+      heading: "Create Your First Trip",
+      body: "Build your trip board and start organizing your travel plans today.",
+      navTitle: "TripBliss : Onboarding",
+      isLast: true,
+    },
+  ]
+
+  const screen = screens[step]
+
+  return (
+    <div className="onboarding-page">
+      <div className="onboarding-nav">
+        {step > 0 && (
+          <button className="back-btn" onClick={() => setStep(step - 1)}>
+            <ChevronLeft size={22} color="#1a1a1a" />
+          </button>
+        )}
+        <h2 className="onboarding-nav-title">{screen.navTitle}</h2>
+      </div>
+
+      <div className="onboarding-content">
+        <h2 className="onboarding-title">{screen.title}</h2>
+        <div className="onboarding-image-wrapper">
+          <img src={screen.image} alt={screen.title} className="onboarding-image" />
+        </div>
+        <h3 className="onboarding-heading">{screen.heading}</h3>
+        <p className="onboarding-body">{screen.body}</p>
+      </div>
+
+      <button
+        className="btn-create-trip onboarding-btn"
+        onClick={() => screen.isLast ? onFinish() : setStep(step + 1)}
+      >
+        {screen.isLast ? "Let's Get Started" : "Next"}
+      </button>
+
+      <div className="onboarding-dots">
+        {screens.map((_, i) => (
+          <div key={i} className={`dot ${i === step ? 'dot-active' : ''}`} />
+        ))}
+      </div>
+    </div>
+  )
+}
+
+function SignInPage({ setCurrentPage }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  return (
+    <div className="page auth-page">
+      <div className="auth-header">
+        <h2 className="auth-title">Sign In to An Existing Account</h2>
+      </div>
+      <div className="form-group">
+        <label className="form-label">Email</label>
+        <input className="form-input" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Password</label>
+        <input className="form-input" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      </div>
+      <p className="forgot-link" onClick={() => setCurrentPage('forgotPassword')}>
+        Forgot Password? Click Here
+      </p>
+      <div className="auth-buttons">
+        <button className="btn-create-trip" onClick={() => setCurrentPage('home')}>
+          Sign In
+        </button>
+        <p className="auth-switch" onClick={() => setCurrentPage('register')}>
+          Don't have an account? Register here
+        </p>
+      </div>
+    </div>
+  )
+}
+
+function RegisterPage({ setCurrentPage }) {
+  const [firstName, setFirstName] = useState('')
+  const [lastName, setLastName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+
+  return (
+    <div className="page auth-page">
+      <div className="auth-header">
+        <h2 className="auth-title">Create An Account</h2>
+        <button className="btn-already-have" onClick={() => setCurrentPage('signin')}>
+          I Already Have An Account: Click Here To Sign In
+        </button>
+      </div>
+      <div className="form-group">
+        <label className="form-label">First Name</label>
+        <input className="form-input" type="text" placeholder="First Name" value={firstName} onChange={e => setFirstName(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Last Name</label>
+        <input className="form-input" type="text" placeholder="Last Name" value={lastName} onChange={e => setLastName(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Email</label>
+        <input className="form-input" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Password</label>
+        <input className="form-input" type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      </div>
+      <div className="form-group">
+        <label className="form-label">Confirm Password</label>
+        <input className="form-input" type="password" placeholder="Confirm Password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} />
+      </div>
+      <button className="btn-create-trip" onClick={() => setCurrentPage('home')}>
+        Register
+      </button>
+    </div>
+  )
+}
+
+function ForgotPasswordPage({ setCurrentPage }) {
+  const [email, setEmail] = useState('')
+
+  return (
+    <div className="page auth-page">
+      <div className="auth-header">
+        <h2 className="auth-title">Password Reset</h2>
+        <p className="auth-subtitle">Provide the email address associated with your account to recover your password.</p>
+      </div>
+      <div className="form-group">
+        <label className="form-label">Email</label>
+        <input className="form-input" type="email" placeholder="Email" value={email} onChange={e => setEmail(e.target.value)} />
+      </div>
+      <button className="btn-gray" onClick={() => alert('Password reset email sent!')}>
+        Reset Password
+      </button>
+      <div className="auth-bottom">
+        <button className="btn-create-trip" onClick={() => setCurrentPage('signin')}>
+          Back to Sign In
+        </button>
+      </div>
     </div>
   )
 }
@@ -156,7 +343,9 @@ function ProfilePage({ setCurrentPage }) {
   return (
     <div className="page profile-page">
       <div className="profile-header-card">
-        <div className="profile-avatar">J</div>
+        <div className="profile-avatar">
+          <img src={profilePic} alt="Julia Hof" className="profile-pic" />
+        </div>
         <div className="profile-info">
           <h3 className="profile-name">Julia Hof</h3>
           <p className="profile-email">jhof1@live.maryville.edu</p>
