@@ -490,6 +490,10 @@ function TripBoard({ trip, navigateToTrip }) {
 function TripDetailPage({ trip, setCurrentPage, navigateToCard }) {
   if (!trip) return null
 
+  const [isEditing, setIsEditing] = useState(false)
+  const [notes, setNotes] = useState(trip.notes || 'Add your trip notes here...')
+  const [dates, setDates] = useState(trip.dates || '8/11/2026 - 8/25/2026')
+
   const cardDetails = {
     "Bali, Indonesia": [
       {
@@ -613,27 +617,55 @@ function TripDetailPage({ trip, setCurrentPage, navigateToCard }) {
           />
         ))}
       </div>
+
       <div className="add-btn-wrapper">
         <button className="add-photo-btn" onClick={() => setCurrentPage('browse')}>
           <PlusCircle size={48} color="#8F9996" />
         </button>
       </div>
+
       <div className="notes-section">
-        <h4 className="notes-title">Notes:</h4>
+        <div className="notes-title-row">
+          <h4 className="notes-title">Notes:</h4>
+          <button className="edit-btn" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? '✅ Save' : '✏️ Edit'}
+          </button>
+        </div>
+
         <div className="notes-field">
           <p className="notes-label">Board Name</p>
           <p className="notes-value">{trip.title}</p>
         </div>
+
         <div className="notes-field">
           <p className="notes-label">Trip Dates</p>
-          <p className="notes-value">{trip.dates || '8/11/2026 - 8/25/2026'}</p>
+          {isEditing ? (
+            <input
+              className="notes-edit-input"
+              value={dates}
+              onChange={e => setDates(e.target.value)}
+              placeholder="e.g. 8/11/2026 - 8/25/2026"
+            />
+          ) : (
+            <p className="notes-value">{dates}</p>
+          )}
         </div>
+
         <div className="notes-field notes-field-large">
           <p className="notes-label">Optional Notes</p>
-          <p className="notes-value">{trip.notes || 'Add your trip notes here...'}</p>
-          <span className="edit-pencil">✏️</span>
+          {isEditing ? (
+            <textarea
+              className="notes-edit-textarea"
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              placeholder="Add your trip notes here..."
+            />
+          ) : (
+            <p className="notes-value">{notes}</p>
+          )}
         </div>
       </div>
+
       <button className="btn-create-trip">
         Share Board
       </button>
