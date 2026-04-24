@@ -43,3 +43,6 @@ High-fidelity wireframes were designed in Figma before development began. The ap
 **Julia Hof**
 Maryville University — Bachelor of Computer Science
 Capstone Project — 2026 
+
+## 🖥️ AI Assistance Disclosure
+This project was developed with assistance from Claude AI and VS Code AI tools. Generated code was reviewed, integrated, and tested as part of the TripBliss capstone project.

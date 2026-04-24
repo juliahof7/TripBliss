@@ -1094,3 +1094,9 @@ function ShareSuccessOverlay({ setCurrentPage, onClose }) {
 }
 
 export default App
+
+// ============================================
+// END OF FILE 
+// ===========================================
+// This file was developed with assistance from Claude AI and VS Code AI tools. The code was reviewed, integrated, and adapted for the TripBliss capstone project.
+// ============================================
