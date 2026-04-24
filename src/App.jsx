@@ -1,6 +1,14 @@
+// ============================================
+// TRIPBLISS - Travel Planning App
+// Author: Julia Hof
+// Capstone Project - Maryville University 2026
+// ============================================
+
+// React hooks for state management and side effects
 import { useState, useEffect } from 'react'
+
+// Asset imports - images and logos
 import splashBg from './assets/splash-bg.png'
-import { Home, Map, PlusCircle, Search, User, ChevronLeft } from 'lucide-react'
 import cardMyTrips from './assets/card-mytrips.png'
 import cardCreate from './assets/card-create.png'
 import cardBrowse from './assets/card-browse.png'
@@ -13,8 +21,17 @@ import tripblissImg from './assets/TripBliss.png'
 import profilePic from './assets/icon-profilepic.jpg'
 import overlayBg from './assets/overlay-background.png'
 import tripblissLogo2 from './assets/TripBliss-2.png'
+
+//Lucide React icons for nav and UI elements
+import { Home, Map, PlusCircle, Search, User, ChevronLeft } from 'lucide-react'
+
+// Global CSS import for styling
 import './App.css'
 
+// ============================================
+// MAIN APP COMPONENT
+// Manages global state and page routing
+// ============================================
 function App() {
   const [currentPage, setCurrentPage] = useState('splash')
   const [selectedTrip, setSelectedTrip] = useState(null)
@@ -113,6 +130,9 @@ function App() {
   )
 }
 
+// ============================================
+// SPLASH SCREEN - Auto advances after 3 seconds or on click
+// ============================================
 function SplashScreen({ onEnter }) {
   useEffect(() => {
     const timer = setTimeout(onEnter, 3000)
@@ -126,6 +146,9 @@ function SplashScreen({ onEnter }) {
   )
 }
 
+// ============================================
+// ONBOARDING FLOW - 4 screens intro to app features
+// ============================================
 function OnboardingFlow({ step, setStep, onFinish }) {
   const screens = [
     {
@@ -198,6 +221,9 @@ function OnboardingFlow({ step, setStep, onFinish }) {
   )
 }
 
+// ============================================
+// AUTH PAGES - Sign In, Register, Forgot Password
+// ============================================
 function SignInPage({ setCurrentPage }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -297,6 +323,9 @@ function ForgotPasswordPage({ setCurrentPage }) {
   )
 }
 
+// ============================================
+// TOP NAVIGATION - Back button, page title, profile access
+// ============================================
 function TopNav({ currentPage, setCurrentPage, selectedTrip }) {
   const titles = {
     home: 'Home',
@@ -329,6 +358,9 @@ function TopNav({ currentPage, setCurrentPage, selectedTrip }) {
   )
 }
 
+// ============================================
+// BOTTOM NAVIGATION - Home, Trips, Create, Browse
+// ============================================
 function BottomNav({ currentPage, setCurrentPage }) {
   const tabs = [
     { id: 'home', label: 'Home', icon: <Home size={22} /> },
@@ -354,6 +386,9 @@ function BottomNav({ currentPage, setCurrentPage }) {
   )
 }
 
+// ============================================
+// HOME PAGE - Welcome message and navigation cards
+// ============================================
 function HomePage({ setCurrentPage }) {
   return (
     <div className="page home-page">
@@ -385,6 +420,9 @@ function HomePage({ setCurrentPage }) {
   )
 }
 
+// ============================================
+// PROFILE PAGE - User info, settings, and logout
+// ============================================
 function ProfilePage({ setCurrentPage }) {
   const [notifications, setNotifications] = useState(true)
   const [darkMode, setDarkMode] = useState(false)
@@ -436,6 +474,9 @@ function ProfilePage({ setCurrentPage }) {
   )
 }
 
+// ============================================
+// TRIPS PAGE - List of trip boards with photo previews
+// ============================================
 function TripsPage({ setCurrentPage, navigateToTrip }) {
   const trips = [
     {
@@ -506,6 +547,9 @@ function TripsPage({ setCurrentPage, navigateToTrip }) {
   )
 }
 
+// ============================================
+// TRIP BOARD COMPONENT - Displays trip title and photo carousel
+// ============================================
 function TripBoard({ trip, navigateToTrip }) {
   const [page, setPage] = useState(0)
   const photosPerPage = 6
@@ -536,6 +580,9 @@ function TripBoard({ trip, navigateToTrip }) {
   )
 }
 
+// ============================================
+// TRIP DETAIL PAGE - Shows trip details, notes, and cards
+// ============================================
 function TripDetailPage({ trip, setCurrentPage, navigateToCard, onShare }) {
   if (!trip) return null
 
@@ -722,6 +769,9 @@ function TripDetailPage({ trip, setCurrentPage, navigateToCard, onShare }) {
   )
 }
 
+// ============================================
+// CARD DETAIL PAGE - Shows detailed info about a card with option to add to board or share
+// ============================================    
 function CardDetailPage({ card, source, setCurrentPage, onAddToBoard, onShare }) {
   if (!card) return null
 
@@ -759,6 +809,9 @@ function CardDetailPage({ card, source, setCurrentPage, onAddToBoard, onShare })
   )
 }
 
+// ============================================
+// CREATE PAGE - Form to create a new trip board with name, dates, and notes
+// ============================================
 function CreatePage({ setCurrentPage }) {
   const [boardName, setBoardName] = useState('')
   const [startDate, setStartDate] = useState('')
@@ -809,6 +862,9 @@ function CreatePage({ setCurrentPage }) {
   )
 }
 
+// ============================================
+// BROWSE PAGE - Gallery of photos to browse and add to trip boards
+// ============================================
 function BrowsePage({ navigateToCard }) {
   const [search, setSearch] = useState('')
 
@@ -877,6 +933,9 @@ function BrowsePage({ navigateToCard }) {
   )
 }
 
+// ============================================
+// SHARE BOARD PAGE - Allows users to share a trip board on social media
+// ============================================
 function ShareBoardPage({ trip, setCurrentPage, onShare }) {
   const [instagram, setInstagram] = useState(false)
   const [facebook, setFacebook] = useState(false)
@@ -915,6 +974,9 @@ function ShareBoardPage({ trip, setCurrentPage, onShare }) {
   )
 }
 
+// ============================================
+// SHARE CARD PAGE - Allows users to share a specific card on social media
+// ============================================
 function ShareCardPage({ card, setCurrentPage, onShare }) {
   const [instagram, setInstagram] = useState(false)
   const [facebook, setFacebook] = useState(false)
@@ -953,6 +1015,9 @@ function ShareCardPage({ card, setCurrentPage, onShare }) {
   )
 }
 
+// ============================================
+// SELECT BOARD OVERLAY - Allows users to select a trip board
+// ============================================
 function SelectBoardOverlay({ setCurrentPage, onClose, onSelect }) {
   const boards = ["Bali, Indonesia", "Kauai, Hawaii", "Tahiti, French Polynesia"]
 
@@ -983,6 +1048,9 @@ function SelectBoardOverlay({ setCurrentPage, onClose, onSelect }) {
   )
 }
 
+// ============================================
+// POST SUCCESS OVERLAY - Shows success message after creating a post with option to undo or go home
+// ============================================
 function PostSuccessOverlay({ setCurrentPage, onClose }) {
   return (
     <div className="overlay">
@@ -1004,6 +1072,9 @@ function PostSuccessOverlay({ setCurrentPage, onClose }) {
   )
 }
 
+// ============================================
+// SHARE SUCCESS OVERLAY - Shows success message after sharing a post with option to go home
+// ============================================ 
 function ShareSuccessOverlay({ setCurrentPage, onClose }) {
   return (
     <div className="overlay">
